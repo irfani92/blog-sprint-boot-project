@@ -16,7 +16,7 @@ public class PostController {
     PostService postService;
 
     @GetMapping("/")
-    public List<Post> getPosts(){
+    public Iterable<Post> getPosts(){
         return postService.getPost();
     }
 
