@@ -12,7 +12,7 @@ public class Post {
     private boolean isDeleted;
     private boolean createdAt;
     private boolean publishedAt;
-
+//
     public Post(Integer id, String title, String slug) {
         this.id = id;
         this.title = title;
