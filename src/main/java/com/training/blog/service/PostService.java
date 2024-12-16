@@ -21,11 +21,12 @@ public class PostService {
     PostRepository postRepository;
 
     public Iterable<Post> getPost() {
-        return postRepository.findAll();
+        //return postRepository.findAll();
+        return postRepository.findByIsDeleted(false);
     }
 
     public Post getPostBySlug(String slug){
-        return postRepository.findFirstBySlug(slug).orElse(null);
+        return postRepository.findFirstBySlugAndIsDeleted(slug, false).orElse(null);
     }
 
     public Post createPost(Post post){
@@ -34,7 +35,7 @@ public class PostService {
     }
 
     public Post updatePostBySlug(String slug, Post sendByuser){
-        Post savePost = postRepository.findFirstBySlug(slug).orElse(null);
+        Post savePost = postRepository.findFirstBySlugAndIsDeleted(slug, false).orElse(null);
         if (savePost == null){
             return null;
         }
@@ -47,7 +48,9 @@ public class PostService {
         if (savePost == null){
             return false;
         }
-        postRepository.deleteById(id);
+       // postRepository.deleteById(id);
+        savePost.setDeleted(true);
+        postRepository.save(savePost);
         return true;
     }
 
