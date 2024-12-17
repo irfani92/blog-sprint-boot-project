@@ -1,13 +1,12 @@
 package com.training.blog.controller;
 
 import com.training.blog.entity.Post;
+import com.training.blog.request.post.CreatePostRequest;
+import com.training.blog.response.CreatePostResponse;
 import com.training.blog.service.PostService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -27,8 +26,8 @@ public class PostController {
     }
 
     @PostMapping
-    public Post createPost(@RequestBody Post post){
-        return postService.createPost(post);
+    public CreatePostResponse createPost(@Valid @RequestBody CreatePostRequest createPostRequest){
+        return postService.createPost(createPostRequest);
     }
 
     @PutMapping("/{slug}")

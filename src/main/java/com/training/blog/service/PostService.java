@@ -1,16 +1,17 @@
 package com.training.blog.service;
 
 import com.training.blog.entity.Post;
+import com.training.blog.mapper.PostMapper;
 import com.training.blog.repository.PostRepository;
+import com.training.blog.request.post.CreatePostRequest;
+import com.training.blog.response.CreatePostResponse;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
 
 @Service
 @AllArgsConstructor
@@ -29,9 +30,22 @@ public class PostService {
         return postRepository.findFirstBySlugAndIsDeleted(slug, false).orElse(null);
     }
 
-    public Post createPost(Post post){
+    public CreatePostResponse createPost(CreatePostRequest request){
+//        Post post = new Post();
+//        post.setTitle(request.getTitle());
+//        post.setBody(request.getBody());
+//        post.setSlug(request.getSlug());
+        Post post = PostMapper.INSTANCE.map(request);
+        post.setCommentCount(0L);
         post.setCreatedAt(Instant.now().getEpochSecond());
-        return postRepository.save(post);
+        post = postRepository.save(post);
+
+        return CreatePostResponse.builder()
+                .slug(post.getSlug())
+                .body(post.getBody())
+                .title(post.getTitle())
+                .commentCount(post.getCommentCount())
+                .build();
     }
 
     public Post updatePostBySlug(String slug, Post sendByuser){
